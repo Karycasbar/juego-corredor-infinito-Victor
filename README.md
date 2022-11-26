@@ -1,1 +1,1 @@
-# C19_Plantilla_Proyecto_Tu_Propio_Juego_de_corredor_infinito
+Juego_de_corredor_infinito
