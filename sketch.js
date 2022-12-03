@@ -7,6 +7,7 @@ var gameState = PLAY
 var mukika
 var score = 0
 var tiro, tiroimg
+var tirosgroup, bichosGroup //variables de grupos
 
 function preload(){
 naveImage = loadImage ("nave XD.jpg")
@@ -24,6 +25,9 @@ nave.scale = 0.05
 nave.setCollider("circle")
 nave.debug = false
 mukika.loop() 
+
+tirosgroup = new Group();// crear gruppo para tiros
+bichosGroup = new Group();// crear gruppo para bichos
 }
 
 function draw() {
@@ -82,10 +86,12 @@ function spawnbichos(){
         bicho.addAnimation("running",bicho_multicolor)
         bicho.x = Math.round(random(0,width))
         bicho.setCollider("rectangle")
-        bicho.debug= false
+        bicho.debug= true
         bicho.velocityY = 1.5
         bicho.scale = 3
         bicho.lifetime = 500
+
+        bichosGroup.add(bicho);
     }
 }
 
@@ -93,20 +99,23 @@ function tiros(){
     if  (keyDown("space")){
         tiro = createSprite (nave.x,nave.y,50,50)
         tiro.addImage (tiroimg)
+        tirosgroup.add(tiro)//necesitamos agregar un grupo para que sepa el juego a que elemento toca
         tiro.velocityY = -25
         tiro.depth = nave.depth
         tiro.depth = tiro.depth+1
         tiro.scale = 3
         tiro.lifetime  = 50
-        tiro.setCollider("rectangle")
-        tiro.debug= false
+        tiro.setCollider("rectangle",0,0,10,10)
+        tiro.debug= true
     }
 }
 
 //error en "isTouching"
 function muertes (){
-    if (tiro.isTouching(bicho)){
-        bicho.destroy()
+    if (tirosgroup.isTouching(bichosGroup)){ //se asigna el isTouchin al grupo de tiros
+        bichosGroup.destroyEach();//como es un grupo se destrulle de esta manera
+        tirosgroup.destroyEach();//como es un grupo se destrulle de esta manera
+
     }
     if (bicho.isTouching(nave)){
         gameState = END
